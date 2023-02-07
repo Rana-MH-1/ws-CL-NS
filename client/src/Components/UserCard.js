@@ -1,7 +1,11 @@
 import React from "react";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { DeleteUser } from "../Redux/UserSlice";
+import UpdateModal from "./UpdateModal";
 
 const UserCard = ({ user }) => {
+  const dispatch = useDispatch()
   return (
     <div>
       <Card style={{ width: "18rem" }}>
@@ -14,6 +18,9 @@ const UserCard = ({ user }) => {
             {user.email}
           </Card.Text>
         </Card.Body>
+        <Button onClick={()=> dispatch(DeleteUser(user._id))} variant="danger">Delete</Button>
+        <UpdateModal user={user} />
+
       </Card>
     </div>
   );

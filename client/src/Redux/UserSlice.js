@@ -22,6 +22,29 @@ export const getAllDataUsers = createAsyncThunk("user/getAllDataUsers", async(_,
     }
 })
 
+//Delete a User
+export const DeleteUser = createAsyncThunk("user/DeleteUser", async(id,{rejectWithValue,dispatch})=>{
+    try {
+        const {data} = await axios.delete(`/api/users/${id}`)
+        //dispatch(getAllDataUsers())
+        return data
+    } catch (error) {
+        rejectWithValue(error.response.data.message)
+    }
+
+} )
+
+//Update Data User
+export const UpdateDataUser = createAsyncThunk("user/UpdateDataUser", async(updatedUser,{rejectWithValue,dispatch})=>{
+    try {
+        const {data} = await axios.put(`/api/users/${updatedUser._id}`,updatedUser)
+        return data
+    } catch (error) {
+        rejectWithValue(error.response.data.message)
+    }
+
+} )
+
 
 
 const UserSlice = createSlice({
@@ -57,6 +80,28 @@ const UserSlice = createSlice({
         },
         [getAllDataUsers.rejected]: (state, action)=>{
             state.Errors = action.payload
+    
+        },
+        [DeleteUser.pending] : (state)=>{
+            state.isLoading = true
+        },
+        [DeleteUser.fulfilled] : (state,{type,payload})=>{
+            state.isLoading = false
+            state.users= state.users.filter(user=> user._id !== payload.deletedUser._id)
+        },
+        [DeleteUser.rejected]: (state,{type,payload} )=>{
+            state.Errors = payload
+    
+        },
+        [UpdateDataUser.pending] : (state)=>{
+            state.isLoading = true
+        },
+        [UpdateDataUser.fulfilled] : (state,{type,payload})=>{
+            state.isLoading = false
+            state.users= state.users.map(user=>(user._id == payload._id)? {...user, ...payload} : user)
+        },
+        [UpdateDataUser.rejected]: (state,{type,payload} )=>{
+            state.Errors = payload
     
         }
     

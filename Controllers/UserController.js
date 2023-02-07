@@ -34,7 +34,7 @@ const GetAllDataUsers = async(req,res)=>{
 const deletedDataUser = async(req,res)=>{
     try {
         const deletedUser = await user.findByIdAndDelete(req.params.id)
-        res.json({msg:'User has been deleted successfully !!'})
+        res.json({msg:'User has been deleted successfully !!',deletedUser})
     } catch (error) {
         console.log(error)
     }
